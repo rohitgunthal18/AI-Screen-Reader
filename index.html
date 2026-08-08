@@ -1,412 +1,244 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>AI Screen Reader - Installation Guide</title>
-
+  <title>AI Screen Reader - Best Text to Speech & PDF Audio Reader Extension</title>
+  <meta name="description" content="AI Screen Reader is a premium Chrome extension that converts any article, webpage, or PDF document into high-quality, natural-sounding audio using advanced AI voices.">
+  <meta name="keywords" content="AI Screen Reader, Article Reader, Document File Reader, PDF Reader, Text to Speech, TTS, Screen to Audio tool, Chrome Extension">
+  <meta name="author" content="AI Screen Reader Team">
+  <meta property="og:title" content="AI Screen Reader - Best Text to Speech & PDF Audio Reader Extension">
+  <meta property="og:description" content="Listen to any page, article, or PDF document. Clean content extraction and natural AI voices.">
+  <meta property="og:type" content="website">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
     :root {
-      --bg: #ffffff;
-      --page-bg: #f7f8fa;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --border: #e5e5e5;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --code-bg: #eaeaea;
-      --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      --bg: #f9f9f9;
+      --text: #1a1a1a;
+      --text-muted: #666;
+      --accent: #2c2c2c;
+      --accent-hover: #000;
+      --white: #fff;
     }
-
+    
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
+    
     body {
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
-
-      background: var(--page-bg);
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
       color: var(--text);
       line-height: 1.6;
     }
-
-    .container {
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 20px 60px;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .header h1 {
-      font-size: 2.5rem;
-      line-height: 1.2;
-      margin-bottom: 12px;
-      font-weight: 700;
-    }
-
-    .header p {
-      color: var(--muted);
-      font-size: 1.1rem;
-      max-width: 650px;
-      margin: 0 auto;
-    }
-
-    .step-card {
-      background: var(--bg);
+    
+    header {
       padding: 2rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      margin-bottom: 2rem;
-      box-shadow: var(--card-shadow);
+      background: var(--white);
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-
-    .step-card h3 {
-      margin-bottom: 1rem;
-      font-size: 1.3rem;
-      color: var(--text);
+    
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
     }
-
-    .step-card p {
-      color: var(--text);
-      margin-bottom: 0;
+    
+    .logo {
+      width: 40px;
+      height: 40px;
     }
-
-    .step-card p + p {
-      margin-top: 1rem;
+    
+    .hero {
+      max-width: 900px;
+      margin: 6rem auto;
+      text-align: center;
+      padding: 0 1rem;
     }
-
+    
+    h1 {
+      font-size: 4rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
     .cta-btn {
       display: inline-block;
-      margin-top: 1rem;
-      padding: 0.75rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #ffffff;
-      background: var(--primary);
-      border-radius: 6px;
+      background: var(--accent);
+      color: var(--white);
+      padding: 1rem 2.5rem;
+      border-radius: 0px;
       text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition:
-        background 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-    }
-
-    .cta-btn:hover {
-      background: var(--primary-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 5px 15px rgba(37, 99, 235, 0.25);
-    }
-
-    .cta-btn:active {
-      transform: translateY(0);
-    }
-
-    .download-note {
-      margin-top: 12px;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    code {
-      display: block;
-      background: var(--code-bg);
-      padding: 1rem;
-      margin-top: 1rem;
-      border-radius: 4px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      overflow-x: auto;
-      color: #111827;
-    }
-
-    .inline-code {
-      display: inline;
-      padding: 2px 6px;
-      margin: 0;
-      font-size: 0.95rem;
       font-weight: 600;
+      font-size: 1.1rem;
+      transition: background 0.2s, transform 0.1s;
+      border: 2px solid transparent;
     }
-
-    .footer {
+    
+    .cta-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+    }
+    
+    .features {
+      background: var(--white);
+      padding: 6rem 1rem;
+      border-top: 1px solid #eee;
+    }
+    
+    .features-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+    }
+    
+    .feature-card {
+      padding: 2.5rem;
+      background: var(--bg);
+      border: 1px solid #e5e5e5;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-card p {
+      color: var(--text-muted);
+    }
+    
+    footer {
       text-align: center;
-      color: var(--muted);
+      padding: 3rem 1rem;
+      color: var(--text-muted);
       font-size: 0.9rem;
-      margin-top: 40px;
-    }
-
-    /* Success message */
-    .download-status {
-      display: none;
-      margin-top: 12px;
-      padding: 10px 14px;
-      border-radius: 6px;
-      background: #ecfdf5;
-      color: #047857;
-      font-size: 0.9rem;
-    }
-
-    .download-status.show {
-      display: block;
-    }
-
-    /* Mobile */
-    @media (max-width: 600px) {
-      .container {
-        padding: 25px 15px 45px;
-      }
-
-      .header h1 {
-        font-size: 2rem;
-      }
-
-      .header p {
-        font-size: 1rem;
-      }
-
-      .step-card {
-        padding: 1.5rem;
-        margin-bottom: 1.25rem;
-      }
-
-      .step-card h3 {
-        font-size: 1.15rem;
-      }
-
-      .cta-btn {
-        width: 100%;
-        text-align: center;
-      }
-
-      code {
-        font-size: 0.95rem;
-      }
     }
   </style>
+  
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "AI Screen Reader",
+    "operatingSystem": "Chrome",
+    "applicationCategory": "BrowserExtension",
+    "offers": {
+      "@type": "Offer",
+      "price": "0"
+    },
+    "description": "Convert screen text to speech using natural AI voices. Supports articles, web pages, and local PDF files."
+  }
+  </script>
 </head>
-
 <body>
 
-  <main class="container">
+  <header>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 28 20" fill="currentColor">
+        <rect x="0"  y="7"  width="3" height="6"  rx="1.5"/>
+        <rect x="5"  y="4"  width="3" height="12" rx="1.5"/>
+        <rect x="10" y="0"  width="3" height="20" rx="1.5"/>
+        <rect x="15" y="4"  width="3" height="12" rx="1.5"/>
+        <rect x="20" y="7"  width="3" height="6"  rx="1.5"/>
+        <rect x="25" y="9"  width="3" height="2"  rx="1"/>
+      </svg>
+      AI Screen Reader
+    </div>
+    <a href="#" class="cta-btn" style="padding: 0.5rem 1.25rem; font-size: 0.9rem;">Add to Chrome</a>
+  </header>
 
-    <!-- Page Header -->
-    <header class="header">
-      <h1>AI Screen Reader</h1>
-      <p>
-        Follow the steps below to download and install the AI Screen Reader
-        Chrome extension.
-      </p>
-    </header>
+  <section class="hero">
+    <h1>Listen to the Web.</h1>
+    <p>The ultimate screen-to-audio tool. Convert articles, blogs, and PDF documents into high-fidelity AI speech instantly. <strong>100% free to use with premium AI voices in different countries' tones.</strong></p>
+    <a href="#installation" class="cta-btn">Install Extension Free</a>
+  </section>
 
-
-    <!-- Step 1 -->
-    <div class="step-card">
-
-      <h3>Step 1: Download the Extension</h3>
-
-      <p>
-        First, download the AI Screen Reader extension ZIP file to your
-        computer.
-      </p>
-
-      <!-- DIRECT GITHUB DOWNLOAD BUTTON -->
-      <a
-        href="https://github.com/rohitgunthal18/AI-Screen-Reader/archive/refs/heads/main.zip"
-        class="cta-btn"
-        id="downloadBtn"
-      >
-        Download ZIP File
-      </a>
-
-      <div class="download-status" id="downloadStatus">
-        Your download should begin shortly.
+  <section id="installation" style="background: var(--white); padding: 4rem 1rem; border-top: 1px solid #eee; text-align: left;">
+    <div style="max-width: 800px; margin: 0 auto;">
+      <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem; text-align: center;">How to Install & Configure on Chrome</h2>
+      <p style="margin-bottom: 2rem; color: var(--text-muted); text-align: center;">Since we are not on the Chrome Web Store, follow these simple steps to load the extension manually:</p>
+      
+      <div style="background: var(--bg); padding: 2rem; border-radius: 8px; border: 1px solid #e5e5e5; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Step 1: Download the Extension</h3>
+        <p>First, download the extension ZIP file to your computer.</p>
+        <a href="https://github.com/rohitgunthal18/AI-Screen-Reader/archive/refs/heads/main.zip" class="cta-btn" style="margin-top: 1rem; display: inline-block; padding: 0.75rem 1.5rem; font-size: 1rem;">Download ZIP File</a>
       </div>
 
-      <p class="download-note">
-        The ZIP file contains the latest version from the main branch of the
-        GitHub repository.
-      </p>
+      <div style="background: var(--bg); padding: 2rem; border-radius: 8px; border: 1px solid #e5e5e5; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Step 2: Extract the ZIP File</h3>
+        <p>Locate the downloaded ZIP file on your computer, right-click it, and select <strong>"Extract All..."</strong> (Windows) or double-click to unzip (Mac). Remember the folder location where you extracted it.</p>
+      </div>
 
+      <div style="background: var(--bg); padding: 2rem; border-radius: 8px; border: 1px solid #e5e5e5; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Step 3: Open Chrome Extensions Page</h3>
+        <p>Open Google Chrome. In the address bar, type the following URL and press Enter:</p>
+        <code style="display: block; background: #eaeaea; padding: 1rem; margin-top: 1rem; border-radius: 4px; font-size: 1.1rem; font-weight: bold;">chrome://extensions/</code>
+      </div>
+
+      <div style="background: var(--bg); padding: 2rem; border-radius: 8px; border: 1px solid #e5e5e5; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Step 4: Enable Developer Mode</h3>
+        <p>In the top right corner of the Extensions page, you will see a toggle switch labeled <strong>"Developer mode"</strong>. Click it to turn it ON.</p>
+      </div>
+
+      <div style="background: var(--bg); padding: 2rem; border-radius: 8px; border: 1px solid #e5e5e5; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem;">Step 5: Load the Unpacked Extension</h3>
+        <p>Once Developer mode is on, three new buttons will appear in the top left. Click the one that says <strong>"Load unpacked"</strong>.</p>
+        <p style="margin-top: 1rem;">A file dialog will open. Navigate to the folder where you extracted the ZIP file in Step 2, select the folder, and click "Select Folder".</p>
+      </div>
+      
+      <div style="background: var(--bg); padding: 2rem; border-radius: 8px; border: 1px solid #e5e5e5;">
+        <h3 style="margin-bottom: 1rem;">Step 6: Pin & Use!</h3>
+        <p>The extension is now installed! For easy access, click the "puzzle piece" Extensions icon in Chrome's top right toolbar, find "AI Screen Reader", and click the <strong>Pin icon</strong>.</p>
+        <p style="margin-top: 1rem;">Click the pinned icon on any webpage or PDF to start listening.</p>
+      </div>
     </div>
+  </section>
 
-
-    <!-- Step 2 -->
-    <div class="step-card">
-
-      <h3>Step 2: Extract the ZIP File</h3>
-
-      <p>
-        Locate the downloaded ZIP file on your computer, right-click it, and
-        select <strong>"Extract All..."</strong> on Windows.
-      </p>
-
-      <p>
-        On Mac, double-click the ZIP file to extract it.
-      </p>
-
-      <p>
-        After extracting the repository, open the extracted folder and locate
-        the <strong>AI Screen Reader</strong> folder.
-      </p>
-
-      <p>
-        Remember the folder location because you will need it in Step 5.
-      </p>
-
+  <section class="features">
+    <div class="features-grid">
+      <div class="feature-card">
+        <h3>Smart Article Extraction</h3>
+        <p>Our advanced parsing engine instantly identifies and reads the main content of any page—completely ignoring ads, navigation menus, and repetitive boilerplate.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Local & Online PDF Reader</h3>
+        <p>Your documents aren't limited to the web. Open any local or online PDF file directly in your Chrome browser, and let the AI Screen Reader narrate it flawlessly.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Free Premium Regional Voices</h3>
+        <p>Experience completely free, ultra-realistic regional voices powered by the Fish Audio S2.1 Pro model. Seamlessly switch between distinct, natural country tones (US, UK, Indian, and more).</p>
+      </div>
     </div>
+  </section>
 
-
-    <!-- Step 3 -->
-    <div class="step-card">
-
-      <h3>Step 3: Open Chrome Extensions Page</h3>
-
-      <p>
-        Open Google Chrome. In the address bar, type the following URL and
-        press Enter:
-      </p>
-
-      <code>
-        chrome://extensions/
-      </code>
-
-    </div>
-
-
-    <!-- Step 4 -->
-    <div class="step-card">
-
-      <h3>Step 4: Enable Developer Mode</h3>
-
-      <p>
-        On the Chrome Extensions page, look at the top-right corner.
-        You will see a toggle switch labeled
-        <strong>"Developer mode"</strong>.
-      </p>
-
-      <p>
-        Click the toggle to turn <strong>Developer mode ON</strong>.
-      </p>
-
-    </div>
-
-
-    <!-- Step 5 -->
-    <div class="step-card">
-
-      <h3>Step 5: Load the Unpacked Extension</h3>
-
-      <p>
-        Once Developer mode is enabled, new buttons will appear at the top of
-        the Extensions page.
-      </p>
-
-      <p>
-        Click <strong>"Load unpacked"</strong>.
-      </p>
-
-      <p>
-        A file selection window will appear. Navigate to the folder you
-        extracted in Step 2.
-      </p>
-
-      <p>
-        Open the extracted repository folder and locate the
-        <strong>AI Screen Reader</strong> folder containing the extension's
-        <strong>manifest.json</strong> file.
-      </p>
-
-      <p>
-        Select that folder and click <strong>"Select Folder"</strong>.
-      </p>
-
-    </div>
-
-
-    <!-- Step 6 -->
-    <div class="step-card">
-
-      <h3>Step 6: Pin &amp; Use!</h3>
-
-      <p>
-        The AI Screen Reader extension is now installed.
-      </p>
-
-      <p>
-        For easy access, click the
-        <strong>puzzle-piece Extensions icon</strong>
-        in Chrome's top-right toolbar.
-      </p>
-
-      <p>
-        Find <strong>"AI Screen Reader"</strong> and click the
-        <strong>Pin icon</strong>.
-      </p>
-
-      <p>
-        Click the pinned AI Screen Reader icon on any supported webpage or
-        PDF to start listening.
-      </p>
-
-    </div>
-
-
-    <!-- Footer -->
-    <footer class="footer">
-      <p>
-        AI Screen Reader &copy; <span id="currentYear"></span>
-      </p>
-    </footer>
-
-  </main>
-
-
-  <!-- JavaScript -->
-  <script>
-
-    // Set current year automatically
-    document.getElementById("currentYear").textContent =
-      new Date().getFullYear();
-
-
-    // Download button interaction
-    const downloadBtn = document.getElementById("downloadBtn");
-    const downloadStatus = document.getElementById("downloadStatus");
-
-    downloadBtn.addEventListener("click", function () {
-
-      downloadStatus.classList.add("show");
-
-      // Hide message after 5 seconds
-      setTimeout(function () {
-        downloadStatus.classList.remove("show");
-      }, 5000);
-
-    });
-
-  </script>
+  <footer>
+    &copy; <script>document.write(new Date().getFullYear())</script> AI Screen Reader. All rights reserved.
+  </footer>
 
 </body>
 </html>
-```

@@ -1,0 +1,10 @@
+{
+  "name": "read-a-laud",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Chrome extension that reads web pages and notes aloud via Fish Audio TTS.",
+  "scripts": {
+    "test": "node test/speechify.test.mjs"
+  }
+}

@@ -1,0 +1,58 @@
+/**
+ * Read-a-Laud — in-page highlight styles.
+ *
+ * Two levels of highlight:
+ *   .ral-active       — the whole block currently being read (paragraph, heading, etc.)
+ *   .ral-sentence     — the specific sentence within that block being spoken right now
+ *
+ * Both levels use smooth animated transitions so reading along is comfortable.
+ * Colors use semi-transparent overlays so they work on any page background.
+ */
+
+/* ---- Block-level highlight (whole paragraph / heading being read) ---------- */
+
+.ral-active {
+  /* Warm amber wash that works on both white and colored page backgrounds */
+  background-color: rgba(255, 214, 102, 0.18) !important;
+  border-radius: 4px !important;
+  outline: 2px solid rgba(255, 200, 50, 0.35) !important;
+  outline-offset: 2px !important;
+  transition:
+    background-color 400ms ease,
+    outline-color 400ms ease !important;
+}
+
+/* ---- Sentence-level highlight (the exact sentence being spoken) ----------- */
+
+.ral-sentence {
+  background-color: rgba(255, 200, 50, 0.38) !important;
+  border-radius: 3px !important;
+  padding: 0 2px !important;
+  /* Entrance animation: fades in smoothly as the sentence starts */
+  animation: ral-sentence-in 280ms ease forwards;
+  /* Leaving: handled by removing the class, which removes the animation */
+  transition:
+    background-color 300ms ease,
+    opacity 300ms ease !important;
+}
+
+@keyframes ral-sentence-in {
+  from {
+    background-color: rgba(255, 200, 50, 0.05);
+    opacity: 0.7;
+  }
+  to {
+    background-color: rgba(255, 200, 50, 0.38);
+    opacity: 1;
+  }
+}
+
+/* ---- Reduced motion: still visible, just no animation -------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ral-active,
+  .ral-sentence {
+    transition: none !important;
+    animation: none !important;
+  }
+}

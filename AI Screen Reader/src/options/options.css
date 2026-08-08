@@ -1,0 +1,641 @@
+/**
+ * Read-a-Laud settings.
+ *
+ * Tokens are deliberately self-contained in this file: the side panel is built
+ * by a separate agent, and a shared stylesheet would be owned by neither. Every
+ * color has its base definition on :root, so the dark block below only ever
+ * REDEFINES tokens — nothing gets its sole definition inside a media query.
+ */
+
+:root {
+  /* color — light is the base layer */
+  --bg: #f7f7f5;
+  --surface: #ffffff;
+  --surface-sunken: #f2f2ef;
+  --text: #1a1a19;
+  --text-soft: #5c5c58;
+  /* Kept at AA (4.5:1) against surface, bg AND sunken — it carries real
+     informational text like the empty voice-list state, not just placeholders. */
+  --text-faint: #6b6b65;
+  /* --border is decorative (card edges, which also carry their own surface
+     color). --border-strong outlines real controls — inputs and quiet buttons —
+     so it holds 3:1 per WCAG 1.4.11 non-text contrast. */
+  --border: #e3e3de;
+  --border-strong: #8e8e88;
+  --accent: #1f6f5c;
+  --accent-hover: #185746;
+  --accent-contrast: #ffffff;
+  --accent-wash: #eaf2ef;
+  --ok: #1f6f4a;
+  --warn-wash: #fbf5e6;
+  --warn-border: #e8d9ab;
+  --danger: #a3271f;
+  --danger-wash: #fbeceb;
+  --focus: #1f6f5c;
+  --track: #dcdcd6;
+
+  /* space — 4px base */
+  --s-1: 0.25rem;
+  --s-2: 0.5rem;
+  --s-3: 0.75rem;
+  --s-4: 1rem;
+  --s-5: 1.5rem;
+  --s-6: 2rem;
+  --s-7: 3rem;
+  --s-8: 4rem;
+
+  /* radius */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-pill: 999px;
+
+  /* type */
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    "Noto Sans", sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --t-xs: 0.75rem;
+  --t-sm: 0.8125rem;
+  --t-base: 0.9375rem;
+  --t-md: 1.0625rem;
+  --t-lg: 1.375rem;
+  --t-xl: 2rem;
+  --lh-tight: 1.25;
+  --lh: 1.6;
+
+  /* motion */
+  --dur: 140ms;
+  --ease: cubic-bezier(0.32, 0.72, 0.35, 1);
+  --tr: var(--dur) var(--ease);
+
+  --reading-width: 44rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16171a;
+    --surface: #1e2024;
+    --surface-sunken: #24272c;
+    --text: #eceded;
+    --text-soft: #b0b3b8;
+    --text-faint: #8b8f95;
+    --border: #2e3237;
+    --border-strong: #696f78;
+    --accent: #6fc7ac;
+    --accent-hover: #8ad6be;
+    --accent-contrast: #10251f;
+    --accent-wash: #1c2b28;
+    --ok: #6fc7ac;
+    --warn-wash: #2a2519;
+    --warn-border: #4d452c;
+    --danger: #f19a92;
+    --danger-wash: #2c1d1c;
+    --focus: #6fc7ac;
+    --track: #3a3f45;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: var(--t-base);
+  line-height: var(--lh);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: var(--reading-width);
+  margin: 0 auto;
+  padding: var(--s-7) var(--s-5) var(--s-8);
+}
+
+/* ------------------------------------------------------------- focus + a11y */
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: var(--s-2);
+  padding: var(--s-2) var(--s-4);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: var(--s-4);
+  z-index: 10;
+}
+
+/* ----------------------------------------------------------------- masthead */
+
+.masthead {
+  margin-bottom: var(--s-7);
+}
+
+h1 {
+  margin: 0;
+  font-size: var(--t-xl);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: var(--lh-tight);
+}
+
+.lede {
+  margin: var(--s-2) 0 0;
+  color: var(--text-soft);
+  font-size: var(--t-md);
+}
+
+.saved {
+  margin: var(--s-3) 0 0;
+  min-height: 1.25rem;
+  font-size: var(--t-sm);
+  color: var(--ok);
+  opacity: 0;
+  transition: opacity var(--tr);
+}
+
+.saved.is-visible {
+  opacity: 1;
+}
+
+.saved.is-error {
+  color: var(--danger);
+}
+
+/* -------------------------------------------------------------------- cards */
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: var(--s-5);
+  margin-bottom: var(--s-5);
+}
+
+.card-head {
+  margin-bottom: var(--s-5);
+}
+
+h2 {
+  margin: 0;
+  font-size: var(--t-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: var(--lh-tight);
+}
+
+.sub {
+  margin: var(--s-2) 0 0;
+  color: var(--text-soft);
+  font-size: var(--t-sm);
+}
+
+.body-copy {
+  margin: 0 0 var(--s-4);
+  color: var(--text-soft);
+  max-width: 38rem;
+}
+
+/* ------------------------------------------------------------------- fields */
+
+.field {
+  margin-bottom: var(--s-5);
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  font-weight: 500;
+  font-size: var(--t-sm);
+  margin-bottom: var(--s-2);
+}
+
+.input {
+  width: 100%;
+  padding: var(--s-3);
+  font: inherit;
+  font-size: var(--t-base);
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-md);
+  transition: border-color var(--tr), box-shadow var(--tr);
+}
+
+.input::placeholder {
+  color: var(--text-faint);
+}
+
+.input:hover {
+  border-color: var(--text-faint);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+
+.inline {
+  display: flex;
+  gap: var(--s-2);
+  align-items: stretch;
+}
+
+.inline .input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.hint {
+  margin: var(--s-2) 0 0;
+  font-size: var(--t-sm);
+  color: var(--text-soft);
+  max-width: 38rem;
+}
+
+code {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  background: var(--surface-sunken);
+  padding: 0.1em 0.35em;
+  border-radius: var(--r-sm);
+}
+
+.link {
+  color: var(--accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+
+.link:hover {
+  color: var(--accent-hover);
+}
+
+.ext {
+  vertical-align: -1px;
+  margin-left: 2px;
+}
+
+/* ------------------------------------------------------------------ buttons */
+
+.btn {
+  flex: 0 0 auto;
+  padding: var(--s-3) var(--s-4);
+  font: inherit;
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--accent-contrast);
+  background: var(--accent);
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: background var(--tr), color var(--tr), border-color var(--tr);
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+}
+
+.btn[disabled] {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.btn-quiet {
+  color: var(--text);
+  background: transparent;
+  border-color: var(--border-strong);
+}
+
+.btn-quiet:hover {
+  background: var(--surface-sunken);
+  border-color: var(--text-faint);
+}
+
+.btn-danger {
+  color: var(--danger);
+  background: transparent;
+  border-color: var(--border-strong);
+}
+
+.btn-danger:hover {
+  background: var(--danger-wash);
+  border-color: var(--danger);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+}
+
+.actions-wrap {
+  flex-wrap: wrap;
+}
+
+.feedback {
+  margin: 0;
+  font-size: var(--t-sm);
+  color: var(--text-soft);
+}
+
+.feedback.is-ok {
+  color: var(--ok);
+}
+
+.feedback.is-error {
+  color: var(--danger);
+}
+
+.model-cost {
+  margin-top: var(--s-4);
+}
+
+/* -------------------------------------------------- radio + checkbox cards */
+
+.choices,
+.toggles {
+  display: grid;
+  gap: var(--s-2);
+}
+
+.toggles {
+  margin-bottom: var(--s-6);
+}
+
+.choice,
+.toggle {
+  position: relative;
+}
+
+.choice input,
+.toggle input {
+  position: absolute;
+  top: var(--s-4);
+  left: var(--s-4);
+  margin: 0;
+  accent-color: var(--accent);
+  width: 1rem;
+  height: 1rem;
+}
+
+.choice label,
+.toggle label {
+  display: block;
+  margin: 0;
+  padding: var(--s-4) var(--s-4) var(--s-4) 2.5rem;
+  font-weight: 400;
+  font-size: var(--t-base);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  cursor: pointer;
+  transition: border-color var(--tr), background var(--tr);
+}
+
+.choice label:hover,
+.toggle label:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-sunken);
+}
+
+.choice input:checked + label,
+.toggle input:checked + label {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.choice input:focus-visible + label,
+.toggle input:focus-visible + label {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.choice-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.choice-title,
+.toggle-title {
+  display: block;
+  font-weight: 500;
+}
+
+.choice-title {
+  font-family: var(--mono);
+  font-size: var(--t-sm);
+}
+
+.choice-price {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.unit {
+  font-weight: 400;
+  font-size: var(--t-xs);
+  color: var(--text-soft);
+}
+
+.choice-note,
+.toggle-note {
+  display: block;
+  margin-top: var(--s-1);
+  font-size: var(--t-sm);
+  color: var(--text-soft);
+}
+
+/* ----------------------------------------------------------------- callouts */
+
+.callout {
+  margin: var(--s-5) 0 0;
+  padding: var(--s-4);
+  font-size: var(--t-sm);
+  color: var(--text-soft);
+  background: var(--surface-sunken);
+  border-radius: var(--r-md);
+}
+
+.callout strong {
+  color: var(--text);
+}
+
+.callout-warn {
+  background: var(--warn-wash);
+  border: 1px solid var(--warn-border);
+}
+
+/* ------------------------------------------------------------------ sliders */
+
+.slider-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s-3);
+}
+
+.slider-head label {
+  margin-bottom: 0;
+}
+
+.readout {
+  font-family: var(--mono);
+  font-size: var(--t-sm);
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+input[type="range"] {
+  width: 100%;
+  margin: var(--s-3) 0 0;
+  accent-color: var(--accent);
+  background: transparent;
+  height: 1.25rem;
+}
+
+/* Explicit track/thumb so the control reads the same in both themes. */
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 4px;
+  background: var(--track);
+  border-radius: var(--r-pill);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  margin-top: -0.375rem;
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  transition: transform var(--tr);
+}
+
+input[type="range"]:hover::-webkit-slider-thumb {
+  transform: scale(1.12);
+}
+
+/* --------------------------------------------------------------- voice list */
+
+.current-voice {
+  margin: 0 0 var(--s-5);
+  font-size: var(--t-sm);
+  color: var(--text-soft);
+}
+
+.current-voice strong {
+  color: var(--text);
+}
+
+.voices {
+  list-style: none;
+  margin: var(--s-5) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--s-2);
+}
+
+.voices:empty {
+  margin: 0;
+}
+
+.voice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  transition: border-color var(--tr);
+}
+
+.voice:hover {
+  border-color: var(--border-strong);
+}
+
+.voice.is-selected {
+  border-color: var(--accent);
+  background: var(--accent-wash);
+}
+
+.voice-main {
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+.voice-title {
+  display: block;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.voice-meta {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--t-xs);
+  color: var(--text-soft);
+  overflow-wrap: anywhere;
+}
+
+.voice audio {
+  flex: 1 1 13rem;
+  min-width: 0;
+  height: 2rem;
+}
+
+.empty {
+  margin: var(--s-5) 0 0;
+  font-size: var(--t-sm);
+  color: var(--text-faint);
+}
+
+.empty[hidden] {
+  display: none;
+}
+
+/* ------------------------------------------------------------------- motion */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+
+  input[type="range"]:hover::-webkit-slider-thumb {
+    transform: none;
+  }
+}

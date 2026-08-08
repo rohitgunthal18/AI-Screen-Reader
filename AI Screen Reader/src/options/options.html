@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Read-a-Laud settings</title>
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to settings</a>
+
+<div class="page">
+  <header class="masthead">
+    <h1>Read-a-Laud</h1>
+    <p class="lede">Listen to any page or your notes. Changes save as you make them.</p>
+    <p class="saved" id="saved" role="status" aria-live="polite"></p>
+  </header>
+
+  <main id="main">
+
+    <section class="card" aria-labelledby="h-key">
+      <div class="card-head">
+        <h2 id="h-key">API key</h2>
+        <p class="sub">Read-a-Laud speaks through Fish Audio, and you bring your own key.</p>
+      </div>
+
+      <div class="field">
+        <label for="apiKey">Fish Audio API key</label>
+        <div class="inline">
+          <input type="password" id="apiKey" class="input" autocomplete="off"
+                 spellcheck="false" placeholder="Paste your key here"
+                 aria-describedby="key-note">
+          <button type="button" class="btn btn-quiet" id="keyToggle" aria-pressed="false">Show</button>
+        </div>
+        <p class="hint" id="key-note">
+          The key is stored locally in <code>chrome.storage.local</code> and is only ever
+          sent to <code>api.fish.audio</code>. It is never written to a log and stays
+          masked until you press Show.
+          <a class="link" href="https://fish.audio/app/api-keys" target="_blank" rel="noopener noreferrer">Get a key at fish.audio<svg class="ext" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true" focusable="false"><path d="M6.5 3h6.5v6.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 3 7 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M11 11.5V13H3V5h1.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </p>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn" id="testKey">Test key</button>
+        <p class="feedback" id="keyStatus" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-model">
+      <div class="card-head">
+        <h2 id="h-model">Model</h2>
+        <p class="sub">Fish bills per million UTF-8 bytes of text sent, not per minute of audio.</p>
+      </div>
+
+      <div class="choices" role="radiogroup" aria-labelledby="h-model">
+        <div class="choice">
+          <input type="radio" name="model" id="model-free" value="s2.1-pro-free">
+          <label for="model-free">
+            <span class="choice-top">
+              <span class="choice-title">s2.1-pro-free</span>
+              <span class="choice-price">$0</span>
+            </span>
+            <span class="choice-note">Free tier, and the default. Good enough for everyday
+              reading, and it cannot surprise you with a bill.</span>
+          </label>
+        </div>
+        <div class="choice">
+          <input type="radio" name="model" id="model-pro" value="s2.1-pro">
+          <label for="model-pro">
+            <span class="choice-top">
+              <span class="choice-title">s2.1-pro</span>
+              <span class="choice-price">$15 <span class="unit">per 1M bytes</span></span>
+            </span>
+            <span class="choice-note">Paid tier. Every page you play is charged by the
+              byte, including pages you replay from a cold cache.</span>
+          </label>
+        </div>
+      </div>
+
+      <p class="feedback model-cost" id="modelCost" role="status" aria-live="polite"></p>
+
+      <p class="callout">
+        A 5,000-character English article is roughly 5,000 UTF-8 bytes, which costs
+        <strong>$0.075</strong> on <code>s2.1-pro</code> and <strong>$0</strong> on
+        <code>s2.1-pro-free</code>. Read twenty of those a day and the paid model runs
+        about $1.50 a day, near $135 across a 90-day term. Worth choosing deliberately.
+      </p>
+    </section>
+    <section class="card" aria-labelledby="h-voice">
+      <div class="card-head">
+        <h2 id="h-voice">Voice</h2>
+        <p class="sub">Browse Fish's public voices, or paste an ID straight from a voice page.</p>
+      </div>
+
+      <div class="field">
+        <label for="voiceId">Voice ID</label>
+        <input type="text" id="voiceId" class="input" autocomplete="off" spellcheck="false"
+               placeholder="e.g. 802e3bc2b27e49c2995d23ef70e6ac89" aria-describedby="voice-id-hint">
+        <p class="hint" id="voice-id-hint">
+          Open any voice on fish.audio and copy the ID from its URL. Leave this empty to use
+          the Fish default voice.
+        </p>
+      </div>
+
+      <p class="current-voice" id="currentVoice" aria-live="polite"></p>
+
+      <div class="field">
+        <label for="voiceSearch">Search voices</label>
+        <div class="inline">
+          <input type="search" id="voiceSearch" class="input" autocomplete="off"
+                 placeholder="Search by name, e.g. narrator" aria-describedby="voice-search-hint">
+          <button type="button" class="btn" id="voiceSearchBtn">Search</button>
+        </div>
+        <p class="hint" id="voice-search-hint">Searching needs a working API key.</p>
+      </div>
+
+      <div class="actions actions-wrap">
+        <button type="button" class="btn btn-quiet" id="popularBtn">Popular voices</button>
+        <button type="button" class="btn btn-quiet" id="indianBtn">Find Indian voices</button>
+        <p class="feedback" id="voiceStatus" role="status" aria-live="polite"></p>
+      </div>
+
+      <p class="callout callout-warn">
+        <strong>An honest note on Indian languages.</strong> Fish's officially documented
+        language list (13 languages) does <em>not</em> include Hindi, Tamil, Telugu or any
+        other Indian language. Indian-accented <strong>English</strong> voices are the
+        reliable case here. Hindi and other Indian-language output depends on
+        community-trained voices, and quality varies from excellent to unusable — so
+        preview a voice on a real sentence before you commit to it for a whole textbook.
+      </p>
+
+      <ul class="voices" id="voiceList"></ul>
+      <p class="empty" id="voiceEmpty">No voices loaded yet. Search, or list the popular ones.</p>
+    </section>
+
+    <section class="card" aria-labelledby="h-reading">
+      <div class="card-head">
+        <h2 id="h-reading">Reading</h2>
+        <p class="sub">What gets read out loud, and how it sounds.</p>
+      </div>
+
+      <div class="toggles">
+        <div class="toggle">
+          <input type="checkbox" id="readHeadings">
+          <label for="readHeadings">
+            <span class="toggle-title">Read headings</span>
+            <span class="toggle-note">Announces section titles so you can follow the structure.</span>
+          </label>
+        </div>
+        <div class="toggle">
+          <input type="checkbox" id="readFigures">
+          <label for="readFigures">
+            <span class="toggle-title">Read figure captions</span>
+            <span class="toggle-note">Useful for diagrams in study notes; noisy on image-heavy news.</span>
+          </label>
+        </div>
+        <div class="toggle">
+          <input type="checkbox" id="skipCode">
+          <label for="skipCode">
+            <span class="toggle-title">Skip code blocks</span>
+            <span class="toggle-note">Source code read aloud is rarely intelligible, and you pay per byte.</span>
+          </label>
+        </div>
+        <div class="toggle">
+          <input type="checkbox" id="skipTables">
+          <label for="skipTables">
+            <span class="toggle-title">Skip tables</span>
+            <span class="toggle-note">Tables lose their meaning without the grid. Skip unless they are prose.</span>
+          </label>
+        </div>
+        <div class="toggle">
+          <input type="checkbox" id="highlight">
+          <label for="highlight">
+            <span class="toggle-title">Highlight in the page</span>
+            <span class="toggle-note">Marks the sentence being spoken so you can read along.</span>
+          </label>
+        </div>
+        <div class="toggle">
+          <input type="checkbox" id="autoScroll">
+          <label for="autoScroll">
+            <span class="toggle-title">Auto-scroll</span>
+            <span class="toggle-note">Keeps the highlighted line in view as reading moves down the page.</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="slider-head">
+          <label for="speed">Speed</label>
+          <output class="readout" id="speedOut" for="speed"></output>
+        </div>
+        <input type="range" id="speed" min="0.5" max="2" step="0.05" aria-describedby="speed-hint">
+        <p class="hint" id="speed-hint">
+          Applied during playback, so changing it costs nothing and takes effect immediately.
+        </p>
+      </div>
+
+      <div class="field">
+        <div class="slider-head">
+          <label for="volume">Volume</label>
+          <output class="readout" id="volumeOut" for="volume"></output>
+        </div>
+        <input type="range" id="volume" min="-20" max="20" step="1" aria-describedby="volume-hint">
+        <p class="hint" id="volume-hint">
+          Gain applied at synthesis, in decibels. 0 dB is the voice as recorded.
+        </p>
+      </div>
+
+      <div class="field">
+        <div class="slider-head">
+          <label for="maxChunkChars">Chunk size</label>
+          <output class="readout" id="chunkOut" for="maxChunkChars"></output>
+        </div>
+        <input type="range" id="maxChunkChars" min="200" max="2000" step="50"
+               aria-describedby="chunk-hint">
+        <p class="hint" id="chunk-hint">
+          How much text goes into each request. Smaller chunks start playing sooner but
+          break sentences apart, so the rhythm gets choppier and pauses land in odd
+          places. Larger chunks sound more natural and hold their pacing across a
+          paragraph, but you wait longer before the first word. Around 900 characters is
+          a comfortable middle.
+        </p>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="h-cache">
+      <div class="card-head">
+        <h2 id="h-cache">Cache</h2>
+        <p class="sub">Audio you have already heard is kept on disk.</p>
+      </div>
+      <p class="body-copy">
+        Because Fish bills per byte of text sent, replaying a cached page costs nothing —
+        re-listening to yesterday's chapter before an exam is free. Clearing the cache
+        frees disk space, but the next play of those pages will be synthesized and billed
+        again.
+      </p>
+      <div class="actions">
+        <button type="button" class="btn btn-danger" id="clearCache">Clear cache</button>
+        <p class="feedback" id="cacheStatus" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script type="module" src="options.js"></script>
+</body>
+</html>

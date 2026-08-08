@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Screen Reader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <!-- SVG sprite: all icons in one block, referenced by <use href="#id"> -->
+  <svg class="sprite" aria-hidden="true" focusable="false" width="0" height="0">
+    <symbol id="i-logo-wave" viewBox="0 0 28 20">
+      <rect x="0"  y="7"  width="3" height="6"  rx="1.5" fill="currentColor"/>
+      <rect x="5"  y="4"  width="3" height="12" rx="1.5" fill="currentColor"/>
+      <rect x="10" y="0"  width="3" height="20" rx="1.5" fill="currentColor"/>
+      <rect x="15" y="4"  width="3" height="12" rx="1.5" fill="currentColor"/>
+      <rect x="20" y="7"  width="3" height="6"  rx="1.5" fill="currentColor"/>
+      <rect x="25" y="9"  width="3" height="2"  rx="1"   fill="currentColor"/>
+    </symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.4v13.2L18.6 12z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><rect x="7" y="5" width="3.2" height="14" rx="1.2"/><rect x="13.8" y="5" width="3.2" height="14" rx="1.2"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.5"/></symbol>
+    <symbol id="i-prev" viewBox="0 0 24 24"><path d="M17.4 5.6v12.8L8.3 12z"/><rect x="5" y="5.6" width="2.2" height="12.8" rx="1.1"/></symbol>
+    <symbol id="i-next" viewBox="0 0 24 24"><path d="M6.6 5.6v12.8L15.7 12z"/><rect x="16.8" y="5.6" width="2.2" height="12.8" rx="1.1"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 2v6h-6"/><path d="M21 13a9 9 0 1 1-3-7.7L21 8"/>
+    </symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+      <path d="M4 7h10M18.5 7H20M4 12h2.5M11 12h9M4 17h8.5M17 17h3"/>
+      <circle cx="16.2" cy="7" r="2.1"/><circle cx="8.7" cy="12" r="2.1"/><circle cx="14.7" cy="17" r="2.1"/>
+    </symbol>
+    <symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M18 6L6 18M6 6l12 12"/>
+    </symbol>
+    <symbol id="i-spinner" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-dasharray="16 44"/></symbol>
+    <symbol id="i-follow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5v10.5M7.8 11l4.2 4.2 4.2-4.2M5.5 19.5h13"/></symbol>
+    <symbol id="i-page" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.8h7.5L18 8.3v11.9H6z"/><path d="M13.2 4v4.6H18M8.8 12.5h6.4M8.8 16h4.2"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.8v5M12 16.1h.01"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M15 7l-7.6 7.6M15 7h3M15 7v3"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></symbol>
+    <symbol id="i-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></symbol>
+  </svg>
+
+  <!-- ===== TOPBAR ===== -->
+  <header class="topbar">
+    <div class="topbar__brand">
+      <svg class="topbar__logo" aria-hidden="true"><use href="#i-logo-wave"/></svg>
+      <span class="topbar__name">AI Screen Reader</span>
+    </div>
+    <div class="topbar__actions">
+      <button type="button" class="icon-btn" id="btnRefresh" aria-label="Refresh page content" title="Detect new page">
+        <svg aria-hidden="true"><use href="#i-refresh"/></svg>
+      </button>
+      <button type="button" class="icon-btn" id="btnSettings" aria-label="Settings">
+        <svg aria-hidden="true"><use href="#i-settings"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== PAGE CHANGED BANNER ===== -->
+  <div class="page-banner" id="pageBanner" hidden>
+    <span class="page-banner__text">Page changed</span>
+    <button type="button" class="page-banner__btn" id="btnBannerRefresh">↺ Read new page</button>
+  </div>
+
+  <!-- ===== DOC TITLE ===== -->
+  <div class="doc-header" id="docHeader" hidden>
+    <h1 class="doc-title" id="docTitle"></h1>
+    <p class="doc-meta">
+      <span id="docSite" class="doc-site"></span>
+      <span id="docTime" class="doc-time"></span>
+    </p>
+  </div>
+
+  <!-- ===== STAGE (empty / setup / error / loading) ===== -->
+  <div class="stage" id="stage">
+    <section class="card" id="cardEmpty" hidden>
+      <svg class="card__icon" aria-hidden="true"><use href="#i-page"/></svg>
+      <h2 class="card__title">Ready to listen</h2>
+      <p class="card__body">Extract this page's content and listen from anywhere, or highlight text to read just that part.</p>
+      <div class="card__actions">
+        <button type="button" class="btn btn--primary" id="btnRead">Read this page</button>
+        <button type="button" class="btn btn--ghost" id="btnReadSelection">Selection only</button>
+      </div>
+    </section>
+
+    <section class="card" id="cardSetup" hidden>
+      <svg class="card__icon" aria-hidden="true"><use href="#i-key"/></svg>
+      <h2 class="card__title">Almost ready</h2>
+      <p class="card__body">Open settings to check your configuration. The extension works out of the box — settings let you pick your preferred voice and model.</p>
+      <div class="card__actions">
+        <button type="button" class="btn btn--primary" id="btnSetup">Open settings</button>
+      </div>
+    </section>
+
+    <section class="card" id="cardError" hidden>
+      <svg class="card__icon card__icon--warn" aria-hidden="true"><use href="#i-alert"/></svg>
+      <h2 class="card__title" id="errorTitle">That didn't work</h2>
+      <p class="card__body" id="errorReason"></p>
+      <p class="card__hint" id="errorHint" hidden></p>
+      <div class="card__actions">
+        <button type="button" class="btn btn--primary" id="btnRetry">Try again</button>
+      </div>
+    </section>
+
+    <div class="loading" id="cardLoading" hidden>
+      <p class="loading__msg">
+        <svg class="loading__spin" aria-hidden="true"><use href="#i-spinner"/></svg>
+        <span id="loadingMsg">Reading the page</span>
+      </p>
+      <div class="skeleton" aria-hidden="true">
+        <span class="skeleton__line"></span><span class="skeleton__line"></span>
+        <span class="skeleton__line"></span><span class="skeleton__line"></span>
+        <span class="skeleton__line"></span><span class="skeleton__line"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TRANSCRIPT ===== -->
+  <main class="transcript" id="transcript" hidden aria-label="Transcript"></main>
+
+  <!-- Follow pill -->
+  <button type="button" class="follow-pill" id="btnFollow" hidden>
+    <svg aria-hidden="true"><use href="#i-follow"/></svg>
+    Follow
+  </button>
+
+  <!-- ===== TRANSPORT ===== -->
+  <footer class="transport">
+    <p class="status-line" id="status" role="status" aria-live="polite"></p>
+
+    <!-- Progress bar -->
+    <div class="progress-track" id="progress" role="progressbar"
+         aria-label="Reading progress" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0">
+      <span class="progress-fill" id="progressFill"></span>
+    </div>
+
+    <!-- Controls row -->
+    <div class="controls">
+      <button type="button" class="ctl" id="btnPrev" aria-label="Previous sentence">
+        <svg aria-hidden="true"><use href="#i-prev"/></svg>
+      </button>
+      <button type="button" class="ctl ctl--play" id="btnPlay" aria-label="Play">
+        <svg aria-hidden="true"><use href="#i-play" id="playIcon"/></svg>
+      </button>
+      <button type="button" class="ctl" id="btnNext" aria-label="Next sentence">
+        <svg aria-hidden="true"><use href="#i-next"/></svg>
+      </button>
+      <button type="button" class="ctl" id="btnStop" aria-label="Stop">
+        <svg aria-hidden="true"><use href="#i-stop"/></svg>
+      </button>
+      <div class="speed-pill" role="group" aria-label="Speech speed">
+        <button type="button" class="speed-pill__step" id="btnSlower" aria-label="Slower">−</button>
+        <output class="speed-pill__val" id="speedVal" for="btnSlower btnFaster">1.0×</output>
+        <button type="button" class="speed-pill__step" id="btnFaster" aria-label="Faster">+</button>
+      </div>
+      <button type="button" class="ctl" id="btnVoiceQuick" aria-label="Change Voice">
+        <svg aria-hidden="true"><use href="#i-volume"/></svg>
+      </button>
+    </div>
+
+    <p class="usage-line" id="usage"></p>
+  </footer>
+
+  <!-- ===== SETTINGS DRAWER (inline, slides up) ===== -->
+  <div class="drawer-backdrop" id="drawerBackdrop" aria-hidden="true"></div>
+  <aside class="settings-drawer" id="settingsDrawer" aria-label="Settings" hidden>
+    <div class="drawer-header">
+      <span class="drawer-title">Settings</span>
+      <button type="button" class="icon-btn" id="btnCloseSettings" aria-label="Close settings">
+        <svg aria-hidden="true"><use href="#i-close"/></svg>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- Voice Picker -->
+      <section class="drawer-section">
+        <label class="drawer-label" id="voicePickerLabel">Voice</label>
+        <div class="custom-select" id="voicePickerContainer">
+          <button type="button" class="custom-select__trigger" id="voicePickerTrigger" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="voicePickerLabel voicePickerTrigger">
+            <span class="custom-select__val" id="voicePickerValue">Default voice</span>
+            <svg class="select-chevron" aria-hidden="true"><use href="#i-chevron"/></svg>
+          </button>
+          <div class="custom-select__dropdown" id="voicePickerDropdown" role="listbox" hidden>
+            <button type="button" class="custom-option" role="option" aria-selected="true" data-value="">
+              Default voice
+            </button>
+          </div>
+        </div>
+        <p class="drawer-hint">Voices are curated regional picks. Use "Advanced" to search all Fish Audio voices.</p>
+      </section>
+
+      <!-- Speed -->
+      <section class="drawer-section">
+        <div class="drawer-label-row">
+          <label class="drawer-label" for="drawerSpeed">Speed</label>
+          <output class="drawer-readout" id="drawerSpeedOut" for="drawerSpeed">1.0×</output>
+        </div>
+        <input type="range" id="drawerSpeed" class="slider" min="0.5" max="3" step="0.05">
+      </section>
+
+      <!-- Toggles -->
+      <section class="drawer-section">
+        <label class="drawer-label">Reading options</label>
+        <div class="toggle-list">
+          <label class="toggle-row" for="drawerHighlight">
+            <span class="toggle-info">
+              <span class="toggle-name">Highlight while reading</span>
+              <span class="toggle-desc">Marks text in the page as it plays</span>
+            </span>
+            <span class="toggle-switch" aria-hidden="true"></span>
+            <input type="checkbox" id="drawerHighlight" class="toggle-input">
+          </label>
+          <label class="toggle-row" for="drawerAutoScroll">
+            <span class="toggle-info">
+              <span class="toggle-name">Auto-scroll page</span>
+              <span class="toggle-desc">Keeps highlighted text in view</span>
+            </span>
+            <span class="toggle-switch" aria-hidden="true"></span>
+            <input type="checkbox" id="drawerAutoScroll" class="toggle-input">
+          </label>
+          <label class="toggle-row" for="drawerSkipCode">
+            <span class="toggle-info">
+              <span class="toggle-name">Skip code blocks</span>
+              <span class="toggle-desc">Code syntax sounds strange when read aloud</span>
+            </span>
+            <span class="toggle-switch" aria-hidden="true"></span>
+            <input type="checkbox" id="drawerSkipCode" class="toggle-input">
+          </label>
+          <label class="toggle-row" for="drawerSkipTables">
+            <span class="toggle-info">
+              <span class="toggle-name">Skip tables</span>
+              <span class="toggle-desc">Tables lose structure in audio</span>
+            </span>
+            <span class="toggle-switch" aria-hidden="true"></span>
+            <input type="checkbox" id="drawerSkipTables" class="toggle-input">
+          </label>
+        </div>
+      </section>
+
+      <!-- Model -->
+      <section class="drawer-section">
+        <label class="drawer-label">Model</label>
+        <div class="chip-group">
+          <label class="chip">
+            <input type="radio" name="model" value="s2.1-pro-free" id="modelFree">
+            <span class="chip__label">Free</span>
+          </label>
+          <label class="chip">
+            <input type="radio" name="model" value="s2.1-pro" id="modelPro">
+            <span class="chip__label">Pro · $15/M</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Advanced (collapsible) -->
+      <details class="drawer-advanced">
+        <summary class="drawer-advanced__toggle">Advanced</summary>
+        <div class="drawer-advanced__body">
+          <section class="drawer-section">
+            <label class="drawer-label" for="drawerApiKey">API key override</label>
+            <div class="input-row">
+              <input type="password" id="drawerApiKey" class="input" autocomplete="off" spellcheck="false"
+                     placeholder="Your Fish Audio key (optional)">
+              <button type="button" class="btn btn--ghost btn--sm" id="drawerKeyToggle">Show</button>
+            </div>
+            <div class="input-row" style="margin-top:8px">
+              <button type="button" class="btn btn--ghost btn--sm" id="drawerTestKey">Test key</button>
+              <p class="drawer-feedback" id="drawerKeyStatus" role="status" aria-live="polite"></p>
+            </div>
+          </section>
+          <section class="drawer-section">
+            <label class="drawer-label" for="drawerCustomVoice">Custom voice ID</label>
+            <input type="text" id="drawerCustomVoice" class="input" autocomplete="off" spellcheck="false"
+                   placeholder="Paste a Fish Audio voice ID">
+            <p class="drawer-hint">Overrides the voice selected above.</p>
+          </section>
+          <section class="drawer-section">
+            <button type="button" class="btn btn--danger-ghost btn--sm" id="drawerClearCache">Clear audio cache</button>
+            <p class="drawer-feedback" id="drawerCacheStatus" role="status" aria-live="polite"></p>
+          </section>
+        </div>
+      </details>
+
+      <p class="drawer-save-note" id="drawerSaveNote" aria-live="polite"></p>
+    </div>
+  </aside>
+
+  <script type="module" src="sidepanel.js"></script>
+</body>
+</html>

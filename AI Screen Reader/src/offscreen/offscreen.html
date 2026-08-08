@@ -1,0 +1,22 @@
+<!doctype html>
+<meta charset="utf-8" />
+<title>Read-a-Laud audio</title>
+
+<!--
+  An offscreen document is a hidden, DOM-bearing page that an MV3 extension
+  creates from its service worker to do the handful of things a worker cannot.
+  It never appears in a tab, has no user-visible UI, and lives as long as the
+  reason it was created for (here: AUDIO_PLAYBACK) remains valid.
+
+  It exists in this extension because an MV3 service worker has no Audio
+  constructor, no URL.createObjectURL, and is torn down after ~30s idle — and
+  because Blobs cannot cross chrome.runtime.sendMessage. So the whole audio
+  path (fetch, cache, decode, playback) has to live on this side. See the
+  header of offscreen.js for the full reasoning.
+
+  Nothing is loaded from the network: the extension CSP forbids remote script,
+  styles and fonts, and this page has no need for any of them.
+-->
+
+<script src="../lib/pdf.min.js"></script>
+<script type="module" src="offscreen.js"></script>
